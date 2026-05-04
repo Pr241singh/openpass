@@ -4,12 +4,12 @@ import { z } from 'zod'
 
 export const env = createEnv({
   server: {
-    DATABASE_URL: z.string().url(),
-    GOOGLE_CLIENT_ID: z.string().min(1),
-    GOOGLE_CLIENT_SECRET: z.string().min(1),
+    DATABASE_URL: z.string().url().default("postgresql://postgres:your_secure_password_here@localhost:5432/openpass?schema=public"),
+    GOOGLE_CLIENT_ID: z.string().min(1).default("local_dev_dummy_client_id"),
+    GOOGLE_CLIENT_SECRET: z.string().min(1).default("local_dev_dummy_secret"),
   },
   client: {
-    NEXT_PUBLIC_APP_URL: z.string().url().optional(),
+    NEXT_PUBLIC_APP_URL: z.string().url().optional().default("http://localhost:3002"),
   },
   // Next.js requires you to manually map the variables here
   runtimeEnv: {
