@@ -50,15 +50,15 @@ Ensure you have the following installed:
    cd openpass
    ```
 
-2. **Run the bootstrap script**:
-   This will install dependencies, create your `.env` file, and generate the Prisma client.
+2. **Install Dependencies**:
+   This will automatically install packages and create your local `.env` file from `.env.example`.
 
    ```bash
-   pnpm bootstrap
+   pnpm install
    ```
 
 3. **Configure Environment Variables**:
-   Open the newly created `.env` file and update your credentials (e.g., Google OAuth).
+   Open the `.env` file and update your credentials (e.g., Google OAuth).
 
 4. **Start the Database**:
 
