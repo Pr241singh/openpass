@@ -2,7 +2,8 @@ import { prisma, Prisma } from '@openpass/db'
 import { CreateRegistrationInput } from '@openpass/types'
 import qrcode from 'qrcode'
 import crypto from 'crypto'
-
+import { sendTicketConfirmationEmail } from './email'
+// import { sendTicketConfirmationEmail } from '@openpass/ui'
 export async function createRegistration(data: CreateRegistrationInput, userId: string) {
   // Check if duplicate
   const existing = await prisma.registration.findFirst({
@@ -38,6 +39,25 @@ export async function createRegistration(data: CreateRegistrationInput, userId: 
       },
     })
   })
+
+  // fetches the user and event details needed for the email
+  const [user, event] = await Promise.all([
+    prisma.user.findUnique({ where: { id: userId } }),
+    prisma.event.findUnique({ where: { id: data.eventId } }),
+  ])
+
+  if (user?.email && event) {
+    sendTicketConfirmationEmail({
+      to: user.email,
+      userName: user.name ?? user.email,
+      eventTitle: event.title,
+      eventStartAt: event.startAt,
+      eventEndAt: event.endAt,
+      eventVenue: event.venue,
+      qrCode: qrCodeDataUrl,
+      registrationId: registration.id,
+    })
+  }
 
   return { registration, qrImage: qrCodeDataUrl }
 }
