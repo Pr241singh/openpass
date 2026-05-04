@@ -3,7 +3,28 @@ import QRCode from 'qrcode'
 import { render } from '@react-email/render'
 import { TicketConfirmationEmail } from '@openpass/email'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazily initialise the client so module-level import does not throw
+// when RESEND_API_KEY is absent in local dev.
+let _resend: Resend | null = null
+function getResendClient(): Resend {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY)
+  return _resend
+}
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-GB', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+}
+
+function formatTime(start: Date, end: Date): string {
+  const fmt = (d: Date) =>
+    d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })
+  return `${fmt(start)} – ${fmt(end)}`
+}
 
 export async function sendTicketConfirmationEmail({
   to,
@@ -30,21 +51,6 @@ export async function sendTicketConfirmationEmail({
     color: { dark: '#0f172a', light: '#ffffff' },
   })
 
-  function formatDate(date: Date): string {
-    return date.toLocaleDateString('en-GB', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    })
-  }
-
-  function formatTime(start: Date, end: Date): string {
-    const fmt = (d: Date) =>
-      d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })
-    return `${fmt(start)} - ${fmt(end)}`
-  }
-
   const html = await render(
     TicketConfirmationEmail({
       userName,
@@ -57,7 +63,7 @@ export async function sendTicketConfirmationEmail({
     })
   )
 
-  const { error } = await resend.emails.send({
+  const { error } = await getResendClient().emails.send({
     from: process.env.EMAIL_FROM ?? 'OpenPass <tickets@openpass.app>',
     to,
     subject: `Your ticket for ${eventTitle} ✓`,

@@ -1,5 +1,6 @@
 import { prisma, Prisma } from '@openpass/db'
 import { CreateRegistrationInput } from '@openpass/types'
+import qrcode from 'qrcode'
 import crypto from 'crypto'
 import { sendTicketConfirmationEmail } from './email'
 
@@ -14,6 +15,8 @@ export async function createRegistration(data: CreateRegistrationInput, userId: 
   }
 
   const qrCodeRaw = crypto.randomUUID()
+  // Generate the data URL for the UI (email.ts independently renders its own copy from qrCodeRaw)
+  const qrCodeDataUrl = await qrcode.toDataURL(qrCodeRaw)
 
   const { registration, event } = await prisma.$transaction(
     async (tx: Prisma.TransactionClient) => {
@@ -60,7 +63,7 @@ export async function createRegistration(data: CreateRegistrationInput, userId: 
     })
   }
 
-  return { registration }
+  return { registration, qrImage: qrCodeDataUrl }
 }
 
 export async function checkInRegistration(qrCode: string, checkerUserId: string) {
