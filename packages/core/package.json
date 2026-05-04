@@ -17,6 +17,7 @@
   "dependencies": {
     "@openpass/db": "workspace:*",
     "@openpass/types": "workspace:*",
+    "@openpass/email": "workspace:*",
     "@react-email/render": "^2.0.8",
     "qrcode": "^1.5.3",
     "resend": "^6.12.2",
@@ -25,7 +26,6 @@
   "devDependencies": {
     "@openpass/eslint-config": "workspace:*",
     "@openpass/typescript-config": "workspace:*",
-    "@openpass/email": "workspace:*",
     "@types/node": "^22.15.3",
     "@types/qrcode": "^1.5.5",
     "eslint": "^9.39.1",

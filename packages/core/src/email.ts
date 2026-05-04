@@ -58,7 +58,7 @@ export async function sendTicketConfirmationEmail({
   )
 
   const { error } = await resend.emails.send({
-    from: process.env.EMAIL_FROM ?? 'OpenPass tickets@openpass.app',
+    from: process.env.EMAIL_FROM ?? 'OpenPass <tickets@openpass.app>',
     to,
     subject: `Your ticket for ${eventTitle} ✓`,
     html,

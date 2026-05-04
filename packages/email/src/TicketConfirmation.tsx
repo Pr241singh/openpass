@@ -1,3 +1,16 @@
+import {
+  Body,
+  Container,
+  Head,
+  Heading,
+  Html,
+  Img,
+  Preview,
+  Section,
+  Text,
+  Hr,
+} from '@react-email/components'
+
 interface TicketConfirmationEmailProps {
   userName: string
   eventTitle: string
@@ -18,77 +31,178 @@ export function TicketConfirmationEmail({
   registrationId,
 }: TicketConfirmationEmailProps) {
   return (
-    <div className="bg-gray-100 py-10 font-sans">
-      <div className="max-w-xl mx-auto bg-white rounded-lg overflow-hidden shadow">
-        {/* Header */}
-        <div className="bg-slate-900 px-8 py-6">
-          <h1 className="text-white text-xl font-bold">OpenPass</h1>
-        </div>
+    <Html>
+      <Head />
+      <Preview>Your ticket for {eventTitle} is confirmed ✓</Preview>
 
-        {/* Hero */}
-        <div className="px-8 py-8 bg-gray-50">
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">You're in! 🎉</h2>
-          <p className="text-gray-600">
-            Hi {userName}, your registration for <strong>{eventTitle}</strong> is confirmed.
-          </p>
-        </div>
+      <Body style={main}>
+        <Container style={container}>
+          {/* Header */}
+          <Section style={header}>
+            <Heading style={logo}>OpenPass</Heading>
+          </Section>
 
-        <hr className="border-gray-200" />
+          {/* Hero */}
+          <Section style={hero}>
+            <Heading style={heroTitle}>You're in! 🎉</Heading>
+            <Text style={heroSubtitle}>
+              Hi {userName}, your registration for <strong>{eventTitle}</strong> is confirmed.
+            </Text>
+          </Section>
 
-        {/* Event Details */}
-        <div className="px-8 py-6">
-          <h3 className="text-sm uppercase tracking-wide text-gray-500 mb-4">Event Details</h3>
+          <Hr style={divider} />
 
-          <div className="mb-4">
-            <p className="text-xs text-gray-400 uppercase">Event</p>
-            <p className="font-semibold text-slate-900">{eventTitle}</p>
-          </div>
+          {/* Event Details */}
+          <Section style={section}>
+            <Heading as="h3" style={sectionTitle}>
+              Event Details
+            </Heading>
 
-          <div className="mb-4">
-            <p className="text-xs text-gray-400 uppercase">Date & Time</p>
-            <p className="font-semibold text-slate-900">
-              {eventDate} - {eventTime}
-            </p>
-          </div>
+            <Text style={label}>Event</Text>
+            <Text style={value}>{eventTitle}</Text>
 
-          {eventVenue && (
-            <div className="mb-4">
-              <p className="text-xs text-gray-400 uppercase">Venue</p>
-              <p className="font-semibold text-slate-900">{eventVenue}</p>
-            </div>
-          )}
-        </div>
+            <Text style={label}>Date & Time</Text>
+            <Text style={value}>
+              {eventDate} — {eventTime}
+            </Text>
 
-        <hr className="border-gray-200" />
+            {eventVenue && (
+              <>
+                <Text style={label}>Venue</Text>
+                <Text style={value}>{eventVenue}</Text>
+              </>
+            )}
+          </Section>
 
-        {/* QR Section */}
-        <div className="px-8 py-6 text-center">
-          <h3 className="text-sm uppercase tracking-wide text-gray-500 mb-4">Your Entry QR Code</h3>
+          <Hr style={divider} />
 
-          <p className="text-gray-600 mb-4">Present this QR code at the entrance to check in.</p>
+          {/* QR Section */}
+          <Section style={qrSection}>
+            <Heading as="h3" style={sectionTitle}>
+              Your Entry QR Code
+            </Heading>
 
-          <img
-            src={qrCodeDataUrl}
-            alt="QR Code"
-            className="mx-auto border-8 border-gray-100 rounded-lg"
-            width={200}
-            height={200}
-          />
+            <Text style={qrText}>Present this QR code at the entrance to check in.</Text>
 
-          <p className="text-xs text-gray-400 mt-3 font-mono">
-            Registration ID: {registrationId.slice(0, 8).toUpperCase()}
-          </p>
-        </div>
+            <Img src={qrCodeDataUrl} width={200} height={200} alt="QR Code" style={qrImage} />
 
-        <hr className="border-gray-200" />
+            <Text style={idText}>Registration ID: {registrationId.slice(0, 8).toUpperCase()}</Text>
+          </Section>
 
-        {/* Footer */}
-        <div className="px-8 py-6 bg-gray-50 text-center">
-          <p className="text-xs text-gray-400">
-            This ticket was issued by OpenPass. Do not share this QR code.
-          </p>
-        </div>
-      </div>
-    </div>
+          <Hr style={divider} />
+
+          {/* Footer */}
+          <Section style={footer}>
+            <Text style={footerText}>
+              This ticket was issued by OpenPass. Do not share this QR code.
+            </Text>
+          </Section>
+        </Container>
+      </Body>
+    </Html>
   )
+}
+
+const main = {
+  backgroundColor: '#f6f9fc',
+  fontFamily: 'Arial, sans-serif',
+}
+
+const container = {
+  maxWidth: '600px',
+  margin: '0 auto',
+  backgroundColor: '#ffffff',
+  borderRadius: '8px',
+  overflow: 'hidden',
+}
+
+const header = {
+  backgroundColor: '#0f172a',
+  padding: '24px',
+}
+
+const logo = {
+  color: '#ffffff',
+  fontSize: '20px',
+  margin: 0,
+}
+
+const hero = {
+  padding: '24px',
+  backgroundColor: '#f8fafc',
+}
+
+const heroTitle = {
+  fontSize: '24px',
+  margin: '0 0 8px',
+  color: '#0f172a',
+}
+
+const heroSubtitle = {
+  fontSize: '14px',
+  margin: 0,
+  color: '#475569',
+}
+
+const divider = {
+  borderColor: '#e2e8f0',
+}
+
+const section = {
+  padding: '24px',
+}
+
+const sectionTitle = {
+  fontSize: '14px',
+  textTransform: 'uppercase' as const,
+  color: '#64748b',
+  marginBottom: '12px',
+}
+
+const label = {
+  fontSize: '12px',
+  color: '#94a3b8',
+  margin: '8px 0 2px',
+}
+
+const value = {
+  fontSize: '14px',
+  fontWeight: 'bold',
+  margin: '0 0 8px',
+  color: '#0f172a',
+}
+
+const qrSection = {
+  padding: '24px',
+  textAlign: 'center' as const,
+}
+
+const qrText = {
+  fontSize: '14px',
+  color: '#64748b',
+  marginBottom: '16px',
+}
+
+const qrImage = {
+  margin: '0 auto',
+  display: 'block',
+  border: '8px solid #f1f5f9',
+  borderRadius: '8px',
+}
+
+const idText = {
+  fontSize: '12px',
+  color: '#94a3b8',
+  marginTop: '12px',
+}
+
+const footer = {
+  padding: '24px',
+  backgroundColor: '#f8fafc',
+}
+
+const footerText = {
+  fontSize: '12px',
+  textAlign: 'center' as const,
+  color: '#94a3b8',
 }
