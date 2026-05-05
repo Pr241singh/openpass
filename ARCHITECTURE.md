@@ -53,3 +53,11 @@ This layered approach ensures separation of concerns and maintainability.
 2. Install dependencies using `pnpm install`  
 3. Run the development server  
 4. Make changes and create a pull request  
+
+## Additional Notes
+
+- **Zod for Environment Variables**  
+  The project uses Zod to validate environment variables, ensuring type safety and preventing runtime errors.
+
+- **Docker Setup**  
+  Docker is used to containerize the application, making it easier to run and deploy in consistent environments.
